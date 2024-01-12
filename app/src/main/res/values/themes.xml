@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.Restaurant" parent="android:Theme.Material.Light.NoActionBar">
+        <!-- Cambia el color de la barra de estado aquí -->
+        <item name="android:statusBarColor">@color/black</item>
+        //--Borde superior, inferior app-->
+        <item name="android:backgroundTint">@color/black</item>
+    </style>
+
+
+</resources>
