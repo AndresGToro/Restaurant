@@ -1,5 +1,6 @@
 package com.andresdevs.restaurant
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -40,8 +41,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.TextField
 import androidx.compose.ui.layout.ContentScale
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 
 
 class MainActivity : ComponentActivity() {
@@ -80,7 +85,7 @@ class MainActivity : ComponentActivity() {
                         titulo()
                         cajaTexto()
                         contrasena()
-                        botonIniciarSesion {}
+                        botonIniciarSesion()
                         Spacer(modifier = Modifier.height(90.dp))
                     }
 
@@ -90,6 +95,26 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+    @Composable
+    fun botonIniciarSesion() {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp)
+        ) {
+            Button(
+                onClick = {
+                    val navegation = Intent(this@MainActivity, MenuPrincipal::class.java)
+                    startActivity(navegation)
+                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 16.dp)
+            ) {
+                Text("Iniciar Sesión")
+            }
+        }
+    }
 }
 
 @Composable
@@ -141,23 +166,6 @@ private fun cajaTexto() {
     }
 }
 
-@Composable
-fun botonIniciarSesion(onClick: () -> Unit) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp)
-
-    ) {
-        Button(
-            onClick = { onClick() },
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
-            Text("Iniciar Sesión")
-        }
-    }
-}
 
 @Composable
 private fun contrasena() {
@@ -216,7 +224,7 @@ fun GreetingPreview() {
                 titulo()
                 cajaTexto()
                 contrasena()
-                botonIniciarSesion {}
+                //botonIniciarSesion()
                 Spacer(modifier = Modifier.height(90.dp))
             }
 
