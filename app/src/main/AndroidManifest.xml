@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -27,6 +29,56 @@
         <!-- Add your MenuPrincipal activity -->
         <activity
             android:name=".MenuPrincipal"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Restaurant" />
+
+        <activity
+            android:name=".Usuario"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Restaurant" />
+
+        <activity
+            android:name=".UsuarioCreate"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Restaurant" />
+
+        <activity
+            android:name=".UsuarioUpdate"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Restaurant" />
+
+        <activity
+            android:name=".IvaUpdate"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Restaurant" />
+
+        <activity
+            android:name=".Categoria"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Restaurant" />
+
+        <activity
+            android:name=".CategoriaCreate"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Restaurant" />
+
+        <activity
+            android:name=".CategoriaUpdate"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Restaurant" />
+
+        <activity
+            android:name=".Producto"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Restaurant" />
+
+        <activity
+            android:name=".ProductoCreate"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Restaurant" />
+
+        <activity
+            android:name=".ProductoUpdate"
             android:label="@string/app_name"
             android:theme="@style/Theme.Restaurant" />
     </application>

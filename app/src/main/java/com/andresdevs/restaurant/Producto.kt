@@ -10,18 +10,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import com.andresdevs.restaurant.ui.theme.RestaurantTheme
 
-class MenuPrincipal : ComponentActivity() {
+class Producto: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             RestaurantTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                     contentColor = Color.Black
                 ) {
-                    NavDrawer()
+                    NavDrawer5()
                 }
             }
         }
