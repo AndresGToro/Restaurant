@@ -12,6 +12,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.andresdevs.restaurant.metodos.botonCRUD
+import com.andresdevs.restaurant.metodos.cajaNumerosEnteros
+import com.andresdevs.restaurant.metodos.cajaTexto
+import com.andresdevs.restaurant.metodos.contrasena
+import com.andresdevs.restaurant.metodos.menuBox
+import com.andresdevs.restaurant.metodos.tituloNegro
 import com.andresdevs.restaurant.ui.theme.RestaurantTheme
 
 class UsuarioCreate : ComponentActivity() {
@@ -28,19 +34,19 @@ class UsuarioCreate : ComponentActivity() {
                     contentColor = Color.Black
                 ) {
                     Column {
-                        tituloNegro("USUARIO")
-                        cajaNumerosEnteros("CÉDULA")
-                        cajaTexto("NOMBRE COMPLETO")
-                        cajaTexto("NOMBRE USUARIO")
+                        tituloNegro("Usuario")
+                        cajaNumerosEnteros("Cédula")
+                        cajaTexto("Nombre completo")
+                        cajaTexto("Nombre usuario")
                         menuBox()
-                        cajaNumerosEnteros("CELULAR")
-                        cajaTexto("CORREO")
-                        contrasena("CONTRASEÑA")
-                        cajaTexto("DIRECCIÓN")
-                        botonCRUD("CREAR") {
+                        cajaNumerosEnteros("Celular")
+                        cajaTexto("Correo")
+                        contrasena("Contraseña")
+                        cajaTexto("Dirección")
+                        botonCRUD("Crear") {
                             Toast.makeText(
                                 this@UsuarioCreate,
-                                "USUARIO CREADO !!!",
+                                "Usuario creado !!!",
                                 Toast.LENGTH_SHORT
                             ).show()
                             finish()

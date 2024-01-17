@@ -52,6 +52,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.andresdevs.restaurant.datos.getCategoriaItems
+import com.andresdevs.restaurant.metodos.botonCRUD
+import com.andresdevs.restaurant.metodos.botonFlotanteAgregar
+import com.andresdevs.restaurant.metodos.cajaNumerosEnteros
+import com.andresdevs.restaurant.metodos.tituloNegro
 import kotlinx.coroutines.launch
 
 //=============================  MENU DESPLEGABLE   =============================
@@ -382,7 +387,7 @@ fun NavDrawer3() {
                 Column {
                     tituloNegro("Iva")
                     cajaNumerosEnteros("Iva")
-                    botonCRUD("ACTUALIZAR") {
+                    botonCRUD("Actualizar") {
 
                     }
                 }
@@ -493,7 +498,8 @@ fun NavDrawer4() {
                 contentAlignment = Alignment.BottomEnd
             ) {
                 //TODOS BOTONES VISUALIZAN PANTALLA
-
+                categoriaItemList(itemList = getCategoriaItems())
+                //BTOTON AGREGAR PANTALLA
                 botonFlotanteAgregar(
                     onClick = {
                         context.startActivity(Intent(context, CategoriaCreate::class.java))

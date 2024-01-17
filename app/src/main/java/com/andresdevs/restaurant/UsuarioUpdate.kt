@@ -12,6 +12,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.andresdevs.restaurant.metodos.botonCRUD
+import com.andresdevs.restaurant.metodos.cajaNumerosEnteros
+import com.andresdevs.restaurant.metodos.cajaTexto
+import com.andresdevs.restaurant.metodos.contrasena
+import com.andresdevs.restaurant.metodos.menuBox
+import com.andresdevs.restaurant.metodos.tituloNegro
 import com.andresdevs.restaurant.ui.theme.RestaurantTheme
 
 class UsuarioUpdate : ComponentActivity() {
@@ -29,18 +35,18 @@ class UsuarioUpdate : ComponentActivity() {
                 ) {
                     Column {
                         tituloNegro("Usuario")
-                        cajaNumerosEnteros("CÉDULA")
-                        cajaTexto("NOMBRE COMPLETO")
-                        cajaTexto("NOMBRE USUARIO")
+                        cajaNumerosEnteros("Cédula")
+                        cajaTexto("Nombre completo")
+                        cajaTexto("Nombre usuario")
                         menuBox()
-                        cajaNumerosEnteros("CELULAR")
-                        cajaTexto("CORREO")
-                        contrasena("CONTRASEÑA")
-                        cajaTexto("DIRECCIÓN")
-                        botonCRUD("ACTUALIZAR") {
+                        cajaNumerosEnteros("Celular")
+                        cajaTexto("Correo")
+                        contrasena("Contraseña")
+                        cajaTexto("Dirección")
+                        botonCRUD("Actualizar") {
                             Toast.makeText(
                                 this@UsuarioUpdate,
-                                "USUARIO ACTUALIZADO !!!",
+                                "Usuario Actualizado !!!",
                                 Toast.LENGTH_SHORT
                             ).show()
                             finish()

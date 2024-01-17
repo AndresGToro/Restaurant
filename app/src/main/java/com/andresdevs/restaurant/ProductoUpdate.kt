@@ -12,6 +12,12 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.andresdevs.restaurant.metodos.botonCRUD
+import com.andresdevs.restaurant.metodos.cajaNumerosDecimales
+import com.andresdevs.restaurant.metodos.cajaTexto
+import com.andresdevs.restaurant.metodos.menuBox2
+import com.andresdevs.restaurant.metodos.tituloNegro
+import com.andresdevs.restaurant.metodos.urlImagen
 import com.andresdevs.restaurant.ui.theme.RestaurantTheme
 
 class ProductoUpdate: ComponentActivity() {
@@ -28,15 +34,15 @@ class ProductoUpdate: ComponentActivity() {
                     contentColor = Color.Black
                 ) {
                     Column {
-                        tituloNegro("PRODUCTO")
+                        tituloNegro("Producto")
                         menuBox2()
-                        cajaTexto("NOMBRE PRODUCTO")
-                        cajaTexto("URL PRODUCTO")
-                        cajaNumerosDecimales("PRECIO")
-                        botonCRUD("ACTUALIZAR") {
+                        cajaTexto("Nombre producto")
+                        cajaNumerosDecimales("Precio")
+                        urlImagen()
+                        botonCRUD("Actualizar") {
                             Toast.makeText(
                                 this@ProductoUpdate,
-                                "PRODUCTO ACTUALIZADO !!!",
+                                "Producto actualizado !!!",
                                 Toast.LENGTH_SHORT
                             ).show()
                             finish()

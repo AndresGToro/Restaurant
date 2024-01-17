@@ -17,6 +17,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import com.andresdevs.restaurant.metodos.imagenMenu
+import com.andresdevs.restaurant.metodos.textoColorAlitas
+import com.andresdevs.restaurant.metodos.tituloNegro
 
 //=============================  MENU ESTATICO   =============================
 @Composable

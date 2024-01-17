@@ -20,6 +20,11 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.ui.layout.ContentScale
+import com.andresdevs.restaurant.metodos.botonCRUD
+import com.andresdevs.restaurant.metodos.cajaTextoFondo
+import com.andresdevs.restaurant.metodos.contrasenaFondo
+import com.andresdevs.restaurant.metodos.imagenLogoInicioSesion
+import com.andresdevs.restaurant.metodos.tituloBlanco
 
 class MainActivity : ComponentActivity() {
 

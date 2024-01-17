@@ -1,20 +1,20 @@
-package com.andresdevs.restaurant
+package com.andresdevs.restaurant.metodos
 
 import android.widget.Toast
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -37,9 +37,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -49,8 +48,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-
-
+import com.andresdevs.restaurant.R
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 
 //=============================    BOTONES    =============================
 @Composable
@@ -116,6 +116,45 @@ fun imagenMenu(imagen: Int) {
     }
 }
 
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+fun urlImagen(): String {
+    var urlValue by remember { mutableStateOf("") }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+    ) {
+        OutlinedTextField(value = urlValue,
+            onValueChange = {
+               // urlValue = it
+                newText -> urlValue = newText},
+            label = { Text(text = stringResource(id = R.string.card_input_url)) },
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp),
+            trailingIcon = {
+                if (urlValue.isNotEmpty()) {
+                    Icon(imageVector = Icons.Filled.Clear,
+                        contentDescription = "Limpiar",
+                        modifier = Modifier
+                            .clickable { urlValue = "" })
+                }
+            })
+
+        GlideImage(
+            model = urlValue,
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp)
+                .border(1.dp, color = Black),
+            contentScale = ContentScale.Crop
+        )
+    }
+    return urlValue
+}
 
 //=============================    TEXTO VISUALIZAR O LEER   =============================
 @Composable
@@ -134,7 +173,8 @@ fun tituloBlanco(titulo: String) {
 }
 
 @Composable
-fun tituloNegro(titulo: String) {
+fun tituloNegro(titulo: String): String {
+
     Text(
         text = titulo,
         color = Black,
@@ -146,6 +186,7 @@ fun tituloNegro(titulo: String) {
             .padding(horizontal = 16.dp) // Puedes ajustar el valor según tus necesidades
             .padding(vertical = 16.dp)
     )
+    return titulo
 }
 
 @Composable
@@ -188,10 +229,8 @@ fun cajaTextoFondo(info: String) {
 }
 
 @Composable
-fun cajaTexto(info: String) {
-    var text by remember {
-        mutableStateOf("")
-    }
+fun cajaTexto(info: String): String {
+    var text by remember { mutableStateOf("") }
 
     Column(
         modifier = Modifier
@@ -202,7 +241,8 @@ fun cajaTexto(info: String) {
             value = text,
             onValueChange = {
                 // Automatically convert the entered text to uppercase
-                text = it.uppercase()
+              //  text = it.uppercase()
+                newText -> text = newText
             },
             label = { Text(info) },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
@@ -212,6 +252,7 @@ fun cajaTexto(info: String) {
                 .padding(vertical = 16.dp)
         )
     }
+    return text
 }
 
 @Composable
@@ -221,7 +262,8 @@ fun contrasenaFondo(info: String) {
     }
 
     var isPasswordVisible by remember {
-        mutableStateOf(false) }
+        mutableStateOf(false)
+    }
 
     Column(
         modifier = Modifier
@@ -232,19 +274,19 @@ fun contrasenaFondo(info: String) {
             value = text,
             onValueChange = { text = it },
             label = { Text(info) },
-            visualTransformation = if(isPasswordVisible) VisualTransformation.None
-                    else PasswordVisualTransformation(),
+            visualTransformation = if (isPasswordVisible) VisualTransformation.None
+            else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 16.dp),
             trailingIcon = {
-                Icon(painter = if(isPasswordVisible)
+                Icon(painter = if (isPasswordVisible)
                     painterResource(id = R.drawable.icon_password_of)
-                    else painterResource(id = R.drawable.icon_password),
+                else painterResource(id = R.drawable.icon_password),
                     contentDescription = null,
                     modifier = Modifier
-                        .clickable { isPasswordVisible = !isPasswordVisible})
+                        .clickable { isPasswordVisible = !isPasswordVisible })
             }
         )
     }
@@ -258,7 +300,8 @@ fun contrasena(info: String) {
     }
 
     var isPasswordVisible by remember {
-        mutableStateOf(false) }
+        mutableStateOf(false)
+    }
 
     Column(
         modifier = Modifier
@@ -269,19 +312,19 @@ fun contrasena(info: String) {
             value = text,
             onValueChange = { text = it },
             label = { Text(info) },
-            visualTransformation = if(isPasswordVisible) VisualTransformation.None
+            visualTransformation = if (isPasswordVisible) VisualTransformation.None
             else PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 16.dp),
             trailingIcon = {
-                Icon(painter = if(isPasswordVisible)
+                Icon(painter = if (isPasswordVisible)
                     painterResource(id = R.drawable.icon_password_of)
                 else painterResource(id = R.drawable.icon_password),
                     contentDescription = null,
                     modifier = Modifier
-                        .clickable { isPasswordVisible = !isPasswordVisible})
+                        .clickable { isPasswordVisible = !isPasswordVisible })
             }
         )
     }
@@ -337,7 +380,7 @@ fun cajaNumerosDecimales(info: String) {
             },
             label = { Text(info) },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
-            textStyle = TextStyle(color = Color.Black),
+            textStyle = TextStyle(color = Black),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 16.dp)
@@ -350,7 +393,7 @@ fun cajaNumerosDecimales(info: String) {
 fun menuBox() {
     val context = LocalContext.current
     val coffeeDrinks =
-        arrayOf("ADMINISTRADOR", "MESERO", "CHEF")
+        arrayOf("Administrador", "Mesero", "Chef")
     var expanded by remember { mutableStateOf(false) }
     var selectedText by remember { mutableStateOf("") }
 
@@ -368,7 +411,7 @@ fun menuBox() {
             OutlinedTextField(
                 value = selectedText,
                 onValueChange = { selectedText = it },
-                label = { Text(text = "CARGO") },
+                label = { Text(text = "Cargo") },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                 modifier = Modifier
                     .menuAnchor()
@@ -405,7 +448,7 @@ fun menuBox() {
 fun menuBox2() {
     val context = LocalContext.current
     val coffeeDrinks =
-        arrayOf("CATEGORIA 1", "CATEGORIA 2", "CATEGORIA N")
+        arrayOf("Categoría 1", "Categoría 2", "Categoría N")
     var expanded by remember { mutableStateOf(false) }
     var selectedText by remember { mutableStateOf("") }
 
@@ -423,7 +466,7 @@ fun menuBox2() {
             OutlinedTextField(
                 value = selectedText,
                 onValueChange = { selectedText = it },
-                label = { Text(text = "CARGO") },
+                label = { Text(text = "Cargo") },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                 modifier = Modifier
                     .menuAnchor()

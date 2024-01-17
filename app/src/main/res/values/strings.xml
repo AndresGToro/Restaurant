@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Restaurant</string>
     <string name="create">Agregar</string>
+    <string name="card_input_url">Url imagen</string>
 </resources>
