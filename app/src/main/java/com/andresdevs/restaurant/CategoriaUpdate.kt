@@ -12,8 +12,9 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.andresdevs.restaurant.datos.updateCategoriaItem
 import com.andresdevs.restaurant.metodos.botonCRUD
-import com.andresdevs.restaurant.metodos.cajaTexto
+import com.andresdevs.restaurant.metodos.cajaTexto2
 import com.andresdevs.restaurant.metodos.tituloNegro
 import com.andresdevs.restaurant.metodos.urlImagen
 import com.andresdevs.restaurant.ui.theme.RestaurantTheme
@@ -21,6 +22,11 @@ import com.andresdevs.restaurant.ui.theme.RestaurantTheme
 class CategoriaUpdate : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //Cargar datos
+        val codigoUnico = intent.getStringExtra("codigoUnicoFilaCategoria") ?: ""
+        val nombreCategoria = intent.getStringExtra("nombreCategoria") ?: ""
+        val urlImagen = intent.getStringExtra("urlImagen") ?: ""
+
         setContent {
             RestaurantTheme {
                 // A surface container using the 'background' color from the theme
@@ -33,9 +39,11 @@ class CategoriaUpdate : ComponentActivity() {
                 ) {
                     Column {
                         tituloNegro("Categoría")
-                        cajaTexto("Nombre categoría")
+                        var newCategoria = cajaTexto2("Nombre categoría", nombreCategoria)
+
                         urlImagen()
                         botonCRUD("Actualizar") {
+                            updateCategoriaItem(codigoUnico,newCategoria, urlImagen)
                             Toast.makeText(
                                 this@CategoriaUpdate,
                                 "Categoría actualizada !!!",

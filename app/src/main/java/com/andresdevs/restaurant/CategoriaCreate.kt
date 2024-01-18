@@ -46,7 +46,7 @@ class CategoriaCreate : ComponentActivity() {
                             val contactsRef = firebaseDatabase.reference.child(titulo)
                             val newDataKey = contactsRef.push().key
                             val contactRef = contactsRef.child(newDataKey!!)
-                            val contact = CategoriaItems(nombreCategoria, url)
+                            val contact = CategoriaItems(newDataKey, nombreCategoria, url)
                             contactRef.setValue(contact)
 
                             Toast.makeText(

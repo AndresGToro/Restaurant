@@ -49,6 +49,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.andresdevs.restaurant.datos.CategoriaItems
+import com.andresdevs.restaurant.datos.deleteCategoriaItem
 import com.andresdevs.restaurant.metodos.tituloNegro
 
 class Categoria : ComponentActivity() {
@@ -138,12 +139,11 @@ fun categoriaItemList(itemList: List<CategoriaItems>) {
                                             //UPDATE
                                             IconButton(onClick = {
                                                 // Utiliza el método editar  un elemento de la lista
-                                                context.startActivity(
-                                                    Intent(
-                                                        context,
-                                                        CategoriaUpdate::class.java
-                                                    )
-                                                )
+                                                val intent = Intent(context, CategoriaUpdate::class.java)
+                                                intent.putExtra("codigoUnicoFilaCategoria", item.codeCategoria) // Reemplaza con el nombre real del campo
+                                                intent.putExtra("nombreCategoria", item.name) // Reemplaza con el nombre real del campo
+                                                intent.putExtra("urlImagen", item.url)
+                                                context.startActivity(intent)
                                             }) {
                                                 Icon(
                                                     imageVector = Icons.Filled.Edit,
@@ -156,6 +156,8 @@ fun categoriaItemList(itemList: List<CategoriaItems>) {
                                             IconButton(onClick = {
                                                 // Utiliza el método remove para eliminar un elemento de la lista
                                                 deletedItem.add(item)
+                                                // Utiliza el método remove para eliminar un elemento de la lista
+                                                deleteCategoriaItem(item)
                                             }) {
                                                 Icon(
                                                     imageVector = Icons.Filled.Delete,

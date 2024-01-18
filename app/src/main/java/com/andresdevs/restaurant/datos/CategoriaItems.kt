@@ -15,6 +15,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
 data class CategoriaItems(
+    val codeCategoria: String,
     val name: String,
     val url: String,
 )
@@ -29,10 +30,12 @@ suspend fun getCategoriaItems2(): List<CategoriaItems> {
             override fun onDataChange(snapshot: DataSnapshot) {
                 val items = mutableListOf<CategoriaItems>()
                 for (childSnapshot in snapshot.children) {
+                    val codeCategoria =
+                        childSnapshot.child("codeCategoria").getValue(String::class.java)
                     val name = childSnapshot.child("name").getValue(String::class.java)
                     val url = childSnapshot.child("url").getValue(String::class.java)
-                    if (name != null && url != null) {
-                        items.add(CategoriaItems(name, url))
+                    if (codeCategoria != null && name != null && url != null) {
+                        items.add(CategoriaItems(codeCategoria, name, url))
                     }
                 }
 
@@ -46,6 +49,7 @@ suspend fun getCategoriaItems2(): List<CategoriaItems> {
         })
     }
 }
+
 @Composable
 fun getCategoriaItems(): List<CategoriaItems> {
     var items by remember { mutableStateOf(emptyList<CategoriaItems>()) }
@@ -58,4 +62,36 @@ fun getCategoriaItems(): List<CategoriaItems> {
     }
 
     return items
+}
+
+// Función para actualizar datos en Firebase Realtime Database
+fun updateCategoriaItem(codeCategoria: String, updatedName: String, updatedUrl: String) {
+    // Utiliza el path adecuado en tu base de datos
+    val databaseReference = Firebase.database.getReference("Categoría/$codeCategoria")
+
+    // Crea un objeto CategoriaItems con los nuevos valores
+    val updatedItem = CategoriaItems(codeCategoria, updatedName, updatedUrl)
+
+    // Actualiza los datos en Firebase
+    databaseReference.setValue(updatedItem)
+        .addOnSuccessListener {
+            // Maneja el éxito, si es necesario
+        }
+        .addOnFailureListener {
+            // Maneja el fallo, si es necesario
+        }
+}
+
+fun deleteCategoriaItem(item: CategoriaItems) {
+    val databaseReference = Firebase.database.getReference("Categoría")
+    // Utiliza el método removeValue para eliminar el elemento de la base de datos
+    databaseReference.child(item.codeCategoria).removeValue()
+        .addOnSuccessListener {
+            // Maneja el éxito, si es necesario
+            // Por ejemplo, muestra un mensaje de éxito o realiza otras operaciones
+        }
+        .addOnFailureListener {
+            // Maneja el fallo, si es necesario
+            // Por ejemplo, muestra un mensaje de error o realiza otras operaciones
+        }
 }

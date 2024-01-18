@@ -27,6 +27,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -158,7 +159,7 @@ fun urlImagen(): String {
 
 //=============================    TEXTO VISUALIZAR O LEER   =============================
 @Composable
-fun tituloBlanco(titulo: String) {
+fun tituloBlanco(titulo: String): String {
     Text(
         text = titulo,
         color = Color.White,
@@ -167,9 +168,9 @@ fun tituloBlanco(titulo: String) {
         textAlign = TextAlign.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp) // Puedes ajustar el valor según tus necesidades
-            .padding(vertical = 16.dp)
+            .padding(16.dp)
     )
+    return titulo
 }
 
 @Composable
@@ -183,14 +184,13 @@ fun tituloNegro(titulo: String): String {
         textAlign = TextAlign.Center,
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp) // Puedes ajustar el valor según tus necesidades
-            .padding(vertical = 16.dp)
+            .padding(16.dp)
     )
     return titulo
 }
 
 @Composable
-fun textoColorAlitas(text: String) {
+fun textoColorAlitas(text: String): String {
     Text(
         text = text,
         textAlign = TextAlign.Center,
@@ -198,11 +198,12 @@ fun textoColorAlitas(text: String) {
         maxLines = 2,
         color = contentColorFor(backgroundColor = Color(0xff8e2301))
     )
+    return text
 }
 
 //=============================    CAJAS TEXTO O INGRESAR DATOS   =============================
 @Composable
-fun cajaTextoFondo(info: String) {
+fun cajaTextoFondo(info: String): String {
     var text by remember {
         mutableStateOf("")
     }
@@ -214,10 +215,7 @@ fun cajaTextoFondo(info: String) {
     ) {
         TextField(
             value = text,
-            onValueChange = {
-                // Automatically convert the entered text to uppercase
-                text = it.uppercase()
-            },
+            onValueChange = { text = it },
             label = { Text(info) },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
             textStyle = TextStyle(color = Black),
@@ -226,6 +224,7 @@ fun cajaTextoFondo(info: String) {
                 .padding(vertical = 16.dp)
         )
     }
+    return text
 }
 
 @Composable
@@ -239,11 +238,7 @@ fun cajaTexto(info: String): String {
     ) {
         OutlinedTextField(
             value = text,
-            onValueChange = {
-                // Automatically convert the entered text to uppercase
-              //  text = it.uppercase()
-                newText -> text = newText
-            },
+            onValueChange = { text = it },
             label = { Text(info) },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
             textStyle = TextStyle(color = Black),
@@ -255,8 +250,40 @@ fun cajaTexto(info: String): String {
     return text
 }
 
+
+
+////////////////
+////////////////
+//////////////// ESTOY MODIFICANDO, SI FUNCIONA REPETIR EN LOS DEMAS METODOS
 @Composable
-fun contrasenaFondo(info: String) {
+fun cajaTexto2(titulo: String, info: String): String {
+    var text by remember { mutableStateOf(info) }
+
+    LaunchedEffect(info) {
+        text = info
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp)
+    ) {
+        OutlinedTextField(
+            value = text,
+            onValueChange = { newText -> text = newText},
+            label = { Text(titulo) },
+            keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
+            textStyle = TextStyle(color = Black),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 16.dp)
+        )
+    }
+    return text
+}
+
+@Composable
+fun contrasenaFondo(info: String): String {
     var text by remember {
         mutableStateOf("")
     }
@@ -290,11 +317,12 @@ fun contrasenaFondo(info: String) {
             }
         )
     }
+    return text
 }
 
 
 @Composable
-fun contrasena(info: String) {
+fun contrasena(info: String): String {
     var text by remember {
         mutableStateOf("")
     }
@@ -328,10 +356,11 @@ fun contrasena(info: String) {
             }
         )
     }
+    return text
 }
 
 @Composable
-fun cajaNumerosEnteros(info: String) {
+fun cajaNumerosEnteros(info: String): String {
     var text by remember {
         mutableStateOf("")
     }
@@ -357,10 +386,11 @@ fun cajaNumerosEnteros(info: String) {
                 .padding(vertical = 16.dp)
         )
     }
+    return text
 }
 
 @Composable
-fun cajaNumerosDecimales(info: String) {
+fun cajaNumerosDecimales(info: String): String {
     var text by remember {
         mutableStateOf("")
     }
@@ -386,6 +416,7 @@ fun cajaNumerosDecimales(info: String) {
                 .padding(vertical = 16.dp)
         )
     }
+    return text
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
