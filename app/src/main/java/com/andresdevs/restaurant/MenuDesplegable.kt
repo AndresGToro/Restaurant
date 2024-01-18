@@ -497,7 +497,7 @@ fun NavDrawer4() {
                     .padding(paddingValues),
                 contentAlignment = Alignment.BottomEnd
             ) {
-                //TODOS BOTONES VISUALIZAN PANTALLA
+
                 categoriaItemList(itemList = getCategoriaItems())
                 //BTOTON AGREGAR PANTALLA
                 botonFlotanteAgregar(
