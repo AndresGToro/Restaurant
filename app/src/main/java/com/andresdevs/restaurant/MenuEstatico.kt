@@ -20,6 +20,10 @@ import androidx.compose.ui.unit.dp
 import com.andresdevs.restaurant.metodos.imagenMenu
 import com.andresdevs.restaurant.metodos.textoColorAlitas
 import com.andresdevs.restaurant.metodos.tituloNegro
+import com.andresdevs.restaurant.modulo.Categoria
+import com.andresdevs.restaurant.modulo.IvaUpdate
+import com.andresdevs.restaurant.modulo.Producto
+import com.andresdevs.restaurant.modulo.Usuario
 
 //=============================  MENU ESTATICO   =============================
 @Composable

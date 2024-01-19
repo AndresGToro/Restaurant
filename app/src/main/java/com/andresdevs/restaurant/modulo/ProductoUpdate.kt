@@ -1,4 +1,4 @@
-package com.andresdevs.restaurant
+package com.andresdevs.restaurant.modulo
 
 import android.os.Bundle
 import android.widget.Toast
@@ -38,7 +38,7 @@ class ProductoUpdate: ComponentActivity() {
                         menuBox2()
                         cajaTexto("Nombre producto")
                         cajaNumerosDecimales("Precio")
-                        urlImagen()
+                        //urlImagen("Url imagen", urlImagen)
                         botonCRUD("Actualizar") {
                             Toast.makeText(
                                 this@ProductoUpdate,

@@ -1,4 +1,4 @@
-package com.andresdevs.restaurant
+package com.andresdevs.restaurant.modulo
 
 import android.os.Bundle
 import android.widget.Toast
@@ -12,17 +12,21 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.andresdevs.restaurant.datos.updateCategoriaItem
 import com.andresdevs.restaurant.metodos.botonCRUD
-import com.andresdevs.restaurant.metodos.cajaNumerosEnteros
-import com.andresdevs.restaurant.metodos.cajaTexto
-import com.andresdevs.restaurant.metodos.contrasena
-import com.andresdevs.restaurant.metodos.menuBox
+import com.andresdevs.restaurant.metodos.cajaTexto2
 import com.andresdevs.restaurant.metodos.tituloNegro
+import com.andresdevs.restaurant.metodos.urlImagen
 import com.andresdevs.restaurant.ui.theme.RestaurantTheme
 
-class UsuarioCreate : ComponentActivity() {
+class CategoriaUpdate : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //Cargar datos
+        val codigoUnico = intent.getStringExtra("codigoUnicoFilaCategoria") ?: ""
+        val nombreCategoria = intent.getStringExtra("nombreCategoria") ?: ""
+        val urlImagen = intent.getStringExtra("urlImagen") ?: ""
+
         setContent {
             RestaurantTheme {
                 // A surface container using the 'background' color from the theme
@@ -34,19 +38,14 @@ class UsuarioCreate : ComponentActivity() {
                     contentColor = Color.Black
                 ) {
                     Column {
-                        tituloNegro("Usuario")
-                        cajaNumerosEnteros("Cédula")
-                        cajaTexto("Nombre completo")
-                        cajaTexto("Nombre usuario")
-                        menuBox()
-                        cajaNumerosEnteros("Celular")
-                        cajaTexto("Correo")
-                        contrasena("Contraseña")
-                        cajaTexto("Dirección")
-                        botonCRUD("Crear") {
+                        tituloNegro("Categoría")
+                        var newNombreCategoria = cajaTexto2("Nombre categoría", nombreCategoria)
+                        var newUrlImgCategoria = urlImagen("Url imagen", urlImagen)
+                        botonCRUD("Actualizar") {
+                            updateCategoriaItem(codigoUnico,newNombreCategoria, newUrlImgCategoria)
                             Toast.makeText(
-                                this@UsuarioCreate,
-                                "Usuario creado !!!",
+                                this@CategoriaUpdate,
+                                "Categoría actualizada !!!",
                                 Toast.LENGTH_SHORT
                             ).show()
                             finish()
@@ -57,4 +56,3 @@ class UsuarioCreate : ComponentActivity() {
         }
     }
 }
-

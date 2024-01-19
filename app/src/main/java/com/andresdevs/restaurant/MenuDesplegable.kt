@@ -52,11 +52,15 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.andresdevs.restaurant.datos.categoriaItemList
 import com.andresdevs.restaurant.datos.getCategoriaItems
 import com.andresdevs.restaurant.metodos.botonCRUD
 import com.andresdevs.restaurant.metodos.botonFlotanteAgregar
 import com.andresdevs.restaurant.metodos.cajaNumerosEnteros
 import com.andresdevs.restaurant.metodos.tituloNegro
+import com.andresdevs.restaurant.modulo.CategoriaCreate
+import com.andresdevs.restaurant.modulo.ProductoCreate
+import com.andresdevs.restaurant.modulo.UsuarioCreate
 import kotlinx.coroutines.launch
 
 //=============================  MENU DESPLEGABLE   =============================
@@ -70,7 +74,7 @@ data class DrawerItems(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavDrawer() {
+fun NavDrawerMenuPrincipal() {
     val drawerItem = listOf(
         DrawerItems(Icons.Default.Home, "Página principal", 0, false),
         DrawerItems(Icons.Default.ShoppingCart, "Menú", 0, false),
@@ -178,7 +182,7 @@ fun NavDrawer() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavDrawer2() {
+fun NavDrawerUsuario() {
     val context = LocalContext.current
     val drawerItem = listOf(
         DrawerItems(Icons.Default.Home, "Página principal", 0, false),
@@ -288,7 +292,7 @@ fun NavDrawer2() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavDrawer3() {
+fun NavDrawerIva() {
     val drawerItem = listOf(
         DrawerItems(Icons.Default.Home, "Página principal", 0, false),
         DrawerItems(Icons.Default.ShoppingCart, "Menú", 0, false),
@@ -399,7 +403,7 @@ fun NavDrawer3() {
 //CATEGORIA
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavDrawer4() {
+fun NavDrawerCategoria() {
     val context = LocalContext.current
 
     val drawerItem = listOf(
@@ -513,7 +517,7 @@ fun NavDrawer4() {
 //PRODUCTOS
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavDrawer5() {
+fun NavDrawerProducto() {
     val context = LocalContext.current
 
     val drawerItem = listOf(

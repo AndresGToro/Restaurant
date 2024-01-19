@@ -1,4 +1,4 @@
-package com.andresdevs.restaurant
+package com.andresdevs.restaurant.modulo
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,22 +8,26 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.andresdevs.restaurant.NavDrawerCategoria
 import com.andresdevs.restaurant.ui.theme.RestaurantTheme
 
-class MenuPrincipal : ComponentActivity() {
+class Categoria : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             RestaurantTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxSize(),
                     color = MaterialTheme.colorScheme.background,
                     contentColor = Color.Black
                 ) {
-                    NavDrawerMenuPrincipal()
+                    NavDrawerCategoria()
                 }
             }
         }
     }
 }
+

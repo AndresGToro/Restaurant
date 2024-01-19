@@ -1,4 +1,4 @@
-package com.andresdevs.restaurant
+package com.andresdevs.restaurant.modulo
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -8,9 +8,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import com.andresdevs.restaurant.NavDrawerIva
 import com.andresdevs.restaurant.ui.theme.RestaurantTheme
 
-class Producto: ComponentActivity() {
+class IvaUpdate : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -22,7 +23,7 @@ class Producto: ComponentActivity() {
                     color = MaterialTheme.colorScheme.background,
                     contentColor = Color.Black
                 ) {
-                    NavDrawer5()
+                    NavDrawerIva()
                 }
             }
         }

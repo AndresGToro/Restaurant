@@ -39,7 +39,6 @@ import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
@@ -119,8 +118,10 @@ fun imagenMenu(imagen: Int) {
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
-fun urlImagen(): String {
-    var urlValue by remember { mutableStateOf("") }
+fun urlImagen(titulo: String, info: String): String {
+    var urlValue by remember { mutableStateOf(info) }
+
+    LaunchedEffect(info) { urlValue = info }
 
     Column(
         modifier = Modifier
@@ -128,10 +129,10 @@ fun urlImagen(): String {
             .padding(horizontal = 16.dp)
     ) {
         OutlinedTextField(value = urlValue,
-            onValueChange = {
-               // urlValue = it
-                newText -> urlValue = newText},
-            label = { Text(text = stringResource(id = R.string.card_input_url)) },
+            onValueChange = { newText ->
+                urlValue = newText
+            },
+            label = { Text(titulo) },
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(vertical = 16.dp),
@@ -228,7 +229,7 @@ fun cajaTextoFondo(info: String): String {
 }
 
 @Composable
-fun cajaTexto(info: String): String {
+fun cajaTexto(titulo: String): String {
     var text by remember { mutableStateOf("") }
 
     Column(
@@ -239,7 +240,7 @@ fun cajaTexto(info: String): String {
         OutlinedTextField(
             value = text,
             onValueChange = { text = it },
-            label = { Text(info) },
+            label = { Text(titulo) },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
             textStyle = TextStyle(color = Black),
             modifier = Modifier
@@ -250,18 +251,12 @@ fun cajaTexto(info: String): String {
     return text
 }
 
-
-
-////////////////
-////////////////
 //////////////// ESTOY MODIFICANDO, SI FUNCIONA REPETIR EN LOS DEMAS METODOS
 @Composable
 fun cajaTexto2(titulo: String, info: String): String {
     var text by remember { mutableStateOf(info) }
 
-    LaunchedEffect(info) {
-        text = info
-    }
+    LaunchedEffect(info) { text = info }
 
     Column(
         modifier = Modifier
@@ -270,7 +265,7 @@ fun cajaTexto2(titulo: String, info: String): String {
     ) {
         OutlinedTextField(
             value = text,
-            onValueChange = { newText -> text = newText},
+            onValueChange = { newText -> text = newText },
             label = { Text(titulo) },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Text),
             textStyle = TextStyle(color = Black),
@@ -527,4 +522,23 @@ fun menuBox2() {
             }
         }
     }
+}
+
+//quitar tildes
+fun String.removeAccents(): String {
+    val unaccentedString = StringBuilder()
+    for (char in this) {
+        val unaccentedChar = when (char) {
+            'á', 'à', 'â', 'ä' -> 'a'
+            'é', 'è', 'ê', 'ë' -> 'e'
+            'í', 'ì', 'î', 'ï' -> 'i'
+            'ó', 'ò', 'ô', 'ö' -> 'o'
+            'ú', 'ù', 'û', 'ü' -> 'u'
+            'ñ' -> 'n'
+            'ç' -> 'c'
+            else -> char
+        }
+        unaccentedString.append(unaccentedChar)
+    }
+    return unaccentedString.toString()
 }

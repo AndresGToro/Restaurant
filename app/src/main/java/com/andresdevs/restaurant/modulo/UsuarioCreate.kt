@@ -1,4 +1,4 @@
-package com.andresdevs.restaurant
+package com.andresdevs.restaurant.modulo
 
 import android.os.Bundle
 import android.widget.Toast
@@ -12,18 +12,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.andresdevs.restaurant.datos.CategoriaItems
 import com.andresdevs.restaurant.metodos.botonCRUD
+import com.andresdevs.restaurant.metodos.cajaNumerosEnteros
 import com.andresdevs.restaurant.metodos.cajaTexto
+import com.andresdevs.restaurant.metodos.contrasena
+import com.andresdevs.restaurant.metodos.menuBox
 import com.andresdevs.restaurant.metodos.tituloNegro
-import com.andresdevs.restaurant.metodos.urlImagen
 import com.andresdevs.restaurant.ui.theme.RestaurantTheme
-import com.google.firebase.Firebase
-import com.google.firebase.database.database
 
-class CategoriaCreate : ComponentActivity() {
-
-    val firebaseDatabase = Firebase.database
+class UsuarioCreate : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -37,20 +34,19 @@ class CategoriaCreate : ComponentActivity() {
                     contentColor = Color.Black
                 ) {
                     Column {
-                        //
-                        val titulo = tituloNegro("Categoría")
-                        val nombreCategoria = cajaTexto("Nombre categoría")
-                        val url = urlImagen()
-
+                        tituloNegro("Usuario")
+                        cajaNumerosEnteros("Cédula")
+                        cajaTexto("Nombre completo")
+                        cajaTexto("Nombre usuario")
+                        menuBox()
+                        cajaNumerosEnteros("Celular")
+                        cajaTexto("Correo")
+                        contrasena("Contraseña")
+                        cajaTexto("Dirección")
                         botonCRUD("Crear") {
-                            val contactsRef = firebaseDatabase.reference.child(titulo)
-                            val newDataKey = contactsRef.push().key
-                            val contactRef = contactsRef.child(newDataKey!!)
-                            val contact = CategoriaItems(newDataKey, nombreCategoria, url)
-                            contactRef.setValue(contact)
-
                             Toast.makeText(
-                                this@CategoriaCreate, "Categoría creada !!!",
+                                this@UsuarioCreate,
+                                "Usuario creado !!!",
                                 Toast.LENGTH_SHORT
                             ).show()
                             finish()
@@ -61,3 +57,4 @@ class CategoriaCreate : ComponentActivity() {
         }
     }
 }
+
