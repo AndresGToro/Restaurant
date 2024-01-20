@@ -1,5 +1,7 @@
 package com.andresdevs.restaurant.metodos
 
+import android.app.AlertDialog
+import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -385,10 +387,8 @@ fun cajaNumerosEnteros(info: String): String {
 }
 
 @Composable
-fun cajaNumerosDecimales(info: String): String {
-    var text by remember {
-        mutableStateOf("")
-    }
+fun cajaNumerosDecimales(titulo: String, info: String): String {
+    var text by remember { mutableStateOf(info) }
 
     Column(
         modifier = Modifier
@@ -403,7 +403,7 @@ fun cajaNumerosDecimales(info: String): String {
                     text = it
                 }
             },
-            label = { Text(info) },
+            label = { Text(titulo) },
             keyboardOptions = KeyboardOptions.Default.copy(keyboardType = KeyboardType.Number),
             textStyle = TextStyle(color = Black),
             modifier = Modifier
@@ -471,10 +471,9 @@ fun menuBox() {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun menuBox2() {
+fun estado(): String {
     val context = LocalContext.current
-    val coffeeDrinks =
-        arrayOf("Categoría 1", "Categoría 2", "Categoría N")
+    val coffeeDrinks = arrayOf("Activo", "Inactivo")
     var expanded by remember { mutableStateOf(false) }
     var selectedText by remember { mutableStateOf("") }
 
@@ -492,7 +491,7 @@ fun menuBox2() {
             OutlinedTextField(
                 value = selectedText,
                 onValueChange = { selectedText = it },
-                label = { Text(text = "Cargo") },
+                label = { Text(text = "Estado") },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                 modifier = Modifier
                     .menuAnchor()
@@ -504,7 +503,7 @@ fun menuBox2() {
                 ExposedDropdownMenu(
                     expanded = expanded,
                     onDismissRequest = {
-                        // We shouldn't hide the menu when the user enters/removes any character
+                        // No ocultar el menú cuando el usuario ingresa/quita cualquier carácter
                     }
                 ) {
                     filteredOptions.forEach { item ->
@@ -522,7 +521,11 @@ fun menuBox2() {
             }
         }
     }
+
+    // Devuelve el texto seleccionado
+    return selectedText
 }
+
 
 //quitar tildes
 fun String.removeAccents(): String {
@@ -542,3 +545,4 @@ fun String.removeAccents(): String {
     }
     return unaccentedString.toString()
 }
+

@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import com.andresdevs.restaurant.datos.updateCategoriaItem
 import com.andresdevs.restaurant.metodos.botonCRUD
 import com.andresdevs.restaurant.metodos.cajaTexto2
+import com.andresdevs.restaurant.metodos.estado
 import com.andresdevs.restaurant.metodos.tituloNegro
 import com.andresdevs.restaurant.metodos.urlImagen
 import com.andresdevs.restaurant.ui.theme.RestaurantTheme
@@ -41,8 +42,12 @@ class CategoriaUpdate : ComponentActivity() {
                         tituloNegro("Categoría")
                         var newNombreCategoria = cajaTexto2("Nombre categoría", nombreCategoria)
                         var newUrlImgCategoria = urlImagen("Url imagen", urlImagen)
+                        var estadoNew = estado()
+                        if(estadoNew!="Activo"||estadoNew!="Inactivo"){
+                            estadoNew = "Activo"
+                        }
                         botonCRUD("Actualizar") {
-                            updateCategoriaItem(codigoUnico,newNombreCategoria, newUrlImgCategoria)
+                            updateCategoriaItem(codigoUnico,newNombreCategoria, newUrlImgCategoria, estadoNew)
                             Toast.makeText(
                                 this@CategoriaUpdate,
                                 "Categoría actualizada !!!",

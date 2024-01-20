@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import com.andresdevs.restaurant.datos.CategoriaItems
 import com.andresdevs.restaurant.metodos.botonCRUD
 import com.andresdevs.restaurant.metodos.cajaTexto
+import com.andresdevs.restaurant.metodos.estado
 import com.andresdevs.restaurant.metodos.removeAccents
 import com.andresdevs.restaurant.metodos.tituloNegro
 import com.andresdevs.restaurant.metodos.urlImagen
@@ -42,12 +43,15 @@ class CategoriaCreate : ComponentActivity() {
                         titulo = titulo.removeAccents()
                         val nombreCategoria = cajaTexto("Nombre categoría")
                         val url = urlImagen("Url imagen", "")
-
+                        var estadoNew = estado()
+                        if(estadoNew!="Activo"||estadoNew!="Inactivo"){
+                            estadoNew = "Activo"
+                        }
                         botonCRUD("Crear") {
                             val contactsRef = firebaseDatabase.reference.child(titulo)
                             val newDataKey = contactsRef.push().key
                             val contactRef = contactsRef.child(newDataKey!!)
-                            val contact = CategoriaItems(newDataKey, nombreCategoria, url)
+                            val contact = CategoriaItems(newDataKey, nombreCategoria, url, estadoNew)
                             contactRef.setValue(contact)
 
                             Toast.makeText(

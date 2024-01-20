@@ -10,6 +10,7 @@ import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -57,6 +58,7 @@ import com.andresdevs.restaurant.modulo.CategoriaUpdate
 import com.andresdevs.restaurant.R
 import com.andresdevs.restaurant.metodos.removeAccents
 import com.andresdevs.restaurant.metodos.tituloNegro
+import com.andresdevs.restaurant.modulo.Producto
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.google.firebase.Firebase
@@ -71,6 +73,7 @@ data class CategoriaItems(
     val codeCategoria: String,
     val name: String,
     val url: String,
+    val estado: String,
 )
 
 //OBTENER DATOS FIREBASE
@@ -91,11 +94,11 @@ suspend fun getCategoriaItems2(): List<CategoriaItems> {
                         childSnapshot.child("codeCategoria").getValue(String::class.java)
                     val name = childSnapshot.child("name").getValue(String::class.java)
                     val url = childSnapshot.child("url").getValue(String::class.java)
-                    if (codeCategoria != null && name != null && url != null) {
-                        items.add(CategoriaItems(codeCategoria, name, url))
+                    val estado = childSnapshot.child("estado").getValue(String::class.java)
+                    if (codeCategoria != null && name != null && url != null && estado != null) {
+                        items.add(CategoriaItems(codeCategoria, name, url, estado))
                     }
                 }
-
                 // Devolvemos la lista directamente
                 continuation.resume(items)
             }
@@ -149,14 +152,20 @@ fun categoriaItemList(itemList: List<CategoriaItems>) {
                             exit = shrinkVertically(animationSpec = tween(durationMillis = 1000))
                         ) {
                             Card(
-                                modifier =
-                                Modifier
+                                modifier = Modifier
                                     .fillMaxWidth()
                                     .height(100.dp)
                                     .padding(10.dp, 5.dp, 10.dp, 5.dp)
-                                    .background(Color.White),
+                                    .background(Color.White)
+                                    .clickable {
+                                        // Acciones al hacer clic en la tarjeta
+                                        val intent = Intent(context, Producto::class.java)
+                                        intent.putExtra("codigoUnicoFilaCategoria", item.codeCategoria)
+                                        context.startActivity(intent)
+                                    },
                                 shape = RoundedCornerShape(5.dp)
                             ) {
+                                // Contenido de la Card
                                 Column(modifier = Modifier.padding(10.dp)) {
                                     Row(modifier = Modifier.fillMaxWidth()) {
                                         GlideImage(
@@ -182,54 +191,67 @@ fun categoriaItemList(itemList: List<CategoriaItems>) {
                                                 ),
                                                 modifier = Modifier
                                                     .padding(20.dp)
-                                                    .weight(1f) // Peso relativo al espacio disponible
+                                                    .weight(1f)
                                             )
+
                                             Spacer(modifier = Modifier.width(16.dp))
-                                            //UPDATE
+
+                                            // Update
                                             IconButton(onClick = {
-                                                // Utiliza el método editar  un elemento de la lista
-                                                val intent =
-                                                    Intent(context, CategoriaUpdate::class.java)
-                                                intent.putExtra(
-                                                    "codigoUnicoFilaCategoria",
-                                                    item.codeCategoria
-                                                ) // Reemplaza con el nombre real del campo
-                                                intent.putExtra(
-                                                    "nombreCategoria",
-                                                    item.name
-                                                ) // Reemplaza con el nombre real del campo
+                                                val intent = Intent(context, CategoriaUpdate::class.java)
+                                                intent.putExtra("codigoUnicoFilaCategoria", item.codeCategoria)
+                                                intent.putExtra("nombreCategoria", item.name)
                                                 intent.putExtra("urlImagen", item.url)
                                                 context.startActivity(intent)
                                             }) {
-                                                Icon(
-                                                    imageVector = Icons.Filled.Edit,
-                                                    contentDescription = "Update"
-                                                )
+                                                Icon(imageVector = Icons.Filled.Edit, contentDescription = "Update")
                                             }
 
                                             Spacer(modifier = Modifier.width(16.dp))
-                                            //DELETE
+
+                                            // Delete
                                             IconButton(onClick = {
-                                                // Utiliza el método remove para eliminar un elemento de la lista
                                                 deletedItem.add(item)
-                                                // Utiliza el método remove para eliminar un elemento de la lista
                                                 deleteCategoriaItem(item)
                                             }) {
-                                                Icon(
-                                                    imageVector = Icons.Filled.Delete,
-                                                    contentDescription = "Deletion"
-                                                )
+                                                Icon(imageVector = Icons.Filled.Delete, contentDescription = "Deletion")
                                             }
                                         }
                                     }
                                 }
                             }
+
                         }
                     }
                 )
             }
         }
     }
+}
+
+// ACTUALIZAR
+fun updateCategoriaItem(codeCategoria: String, updatedName: String, updatedUrl: String, updateEstado: String) {
+    // Utiliza el path adecuado en tu base de datos
+    //quito las tildes
+    val textoConTilde = "Categoría"
+    val textoSinTilde = textoConTilde.removeAccents()
+    val databaseReference = Firebase.database.getReference("$textoSinTilde/$codeCategoria")
+    val updatedItem = CategoriaItems(codeCategoria, updatedName, updatedUrl, updateEstado)
+    databaseReference.setValue(updatedItem)
+        .addOnSuccessListener { }
+        .addOnFailureListener { }
+}
+
+//ELIMINAR
+fun deleteCategoriaItem(item: CategoriaItems) {
+    //quito las tildes
+    val textoConTilde = "Categoría"
+    val textoSinTilde = textoConTilde.removeAccents()
+    val databaseReference = Firebase.database.getReference(textoSinTilde)
+    // Utiliza el método removeValue para eliminar el elemento de la base de datos
+    databaseReference.child(item.codeCategoria).removeValue()
+        .addOnSuccessListener { }
+        .addOnFailureListener { }
 }
 
 // lista de forma horizontal
@@ -292,23 +314,4 @@ fun categoriaItemListHorizontal(itemList: List<CategoriaItems>) {
         }
     }
 
-}
-
-// ACTUALIZAR
-fun updateCategoriaItem(codeCategoria: String, updatedName: String, updatedUrl: String) {
-    // Utiliza el path adecuado en tu base de datos
-    val databaseReference = Firebase.database.getReference("Categoría/$codeCategoria")
-    val updatedItem = CategoriaItems(codeCategoria, updatedName, updatedUrl)
-    databaseReference.setValue(updatedItem)
-        .addOnSuccessListener { }
-        .addOnFailureListener { }
-}
-
-//ELIMINAR
-fun deleteCategoriaItem(item: CategoriaItems) {
-    val databaseReference = Firebase.database.getReference("Categoría")
-    // Utiliza el método removeValue para eliminar el elemento de la base de datos
-    databaseReference.child(item.codeCategoria).removeValue()
-        .addOnSuccessListener { }
-        .addOnFailureListener { }
 }

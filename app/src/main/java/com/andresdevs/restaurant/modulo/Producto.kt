@@ -23,7 +23,8 @@ class Producto: ComponentActivity() {
                     color = MaterialTheme.colorScheme.background,
                     contentColor = Color.Black
                 ) {
-                    NavDrawerProducto()
+                    val codigoUnico = intent.getStringExtra("codigoUnicoFilaCategoria") ?: ""
+                    NavDrawerProducto(codigoUnico)
                 }
             }
         }

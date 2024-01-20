@@ -54,6 +54,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.andresdevs.restaurant.datos.categoriaItemList
 import com.andresdevs.restaurant.datos.getCategoriaItems
+import com.andresdevs.restaurant.datos.getProductoItems
+import com.andresdevs.restaurant.datos.productoItemList
 import com.andresdevs.restaurant.metodos.botonCRUD
 import com.andresdevs.restaurant.metodos.botonFlotanteAgregar
 import com.andresdevs.restaurant.metodos.cajaNumerosEnteros
@@ -517,7 +519,7 @@ fun NavDrawerCategoria() {
 //PRODUCTOS
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NavDrawerProducto() {
+fun NavDrawerProducto(codigoCategoria: String) {
     val context = LocalContext.current
 
     val drawerItem = listOf(
@@ -615,11 +617,17 @@ fun NavDrawerProducto() {
                     .padding(paddingValues),
                 contentAlignment = Alignment.BottomEnd
             ) {
+
+                //carga lista
+                //codigoCategoria
+                productoItemList(itemList = getProductoItems(), codigoCategoria)
                 //TODOS BOTONES VISUALIZAN PANTALLA
 
                 botonFlotanteAgregar(
                     onClick = {
-                        context.startActivity(Intent(context, ProductoCreate::class.java))
+                        val intent = Intent(context, ProductoCreate::class.java)
+                        intent.putExtra("codigoUnicoFilaCategoria", codigoCategoria)
+                        context.startActivity(intent)
                     }
                 )
             }
