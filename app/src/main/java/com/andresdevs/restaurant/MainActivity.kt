@@ -20,11 +20,13 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import com.andresdevs.restaurant.metodos.botonCRUD
 import com.andresdevs.restaurant.metodos.cajaTextoFondo
 import com.andresdevs.restaurant.metodos.contrasenaFondo
 import com.andresdevs.restaurant.metodos.imagenLogoInicioSesion
 import com.andresdevs.restaurant.metodos.tituloBlanco
+import com.andresdevs.restaurant.navegacioninferior.PantallaPrincipal
 
 class MainActivity : ComponentActivity() {
 
@@ -61,7 +63,7 @@ class MainActivity : ComponentActivity() {
                         cajaTextoFondo("Usuario")
                         contrasenaFondo("Contraseña")
                         botonCRUD("Iniciar Sesión") {
-                            startActivity(Intent(this@MainActivity, MenuPrincipal::class.java))
+                            startActivity(Intent(this@MainActivity, PantallaPrincipal::class.java))
                         }
                         Spacer(modifier = Modifier.height(90.dp))
                     }

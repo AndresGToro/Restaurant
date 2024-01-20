@@ -3,7 +3,9 @@ package com.andresdevs.restaurant.datos
 import android.content.Intent
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -18,7 +20,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,6 +45,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Color.Companion.Black
+import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -183,9 +188,16 @@ fun categoriaItemList(itemList: List<CategoriaItems>) {
                                             //UPDATE
                                             IconButton(onClick = {
                                                 // Utiliza el método editar  un elemento de la lista
-                                                val intent = Intent(context, CategoriaUpdate::class.java)
-                                                intent.putExtra("codigoUnicoFilaCategoria", item.codeCategoria) // Reemplaza con el nombre real del campo
-                                                intent.putExtra("nombreCategoria", item.name) // Reemplaza con el nombre real del campo
+                                                val intent =
+                                                    Intent(context, CategoriaUpdate::class.java)
+                                                intent.putExtra(
+                                                    "codigoUnicoFilaCategoria",
+                                                    item.codeCategoria
+                                                ) // Reemplaza con el nombre real del campo
+                                                intent.putExtra(
+                                                    "nombreCategoria",
+                                                    item.name
+                                                ) // Reemplaza con el nombre real del campo
                                                 intent.putExtra("urlImagen", item.url)
                                                 context.startActivity(intent)
                                             }) {
@@ -203,7 +215,7 @@ fun categoriaItemList(itemList: List<CategoriaItems>) {
                                                 // Utiliza el método remove para eliminar un elemento de la lista
                                                 deleteCategoriaItem(item)
                                             }) {
-                                                    Icon(
+                                                Icon(
                                                     imageVector = Icons.Filled.Delete,
                                                     contentDescription = "Deletion"
                                                 )
@@ -219,6 +231,69 @@ fun categoriaItemList(itemList: List<CategoriaItems>) {
         }
     }
 }
+
+// lista de forma horizontal
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+fun categoriaItemListHorizontal(itemList: List<CategoriaItems>) {
+    val deletedItem = remember { mutableStateListOf<CategoriaItems>() }
+
+    Row(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        LazyRow(
+            modifier = Modifier.fillMaxWidth()
+        ) {
+            itemsIndexed(
+                items = itemList,
+                itemContent = { _, item ->
+                    AnimatedVisibility(
+                        visible = !deletedItem.contains(item),
+                        enter = expandHorizontally(),
+                        exit = shrinkHorizontally(animationSpec = tween(durationMillis = 1000))
+                    ) {
+                        Card(
+                            modifier =
+                            Modifier
+                                .width(200.dp) // Ancho de cada elemento, puedes ajustarlo según tus necesidades
+                                .height(200.dp)
+                                .padding(10.dp, 5.dp, 10.dp, 5.dp)
+                                .background(Transparent),
+                            shape = RoundedCornerShape(5.dp)
+                        ) {
+                            Column(modifier = Modifier.padding(10.dp)) {
+                                GlideImage(
+                                    model = item.url,
+                                    contentDescription = null,
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(120.dp) // Altura de la imagen, puedes ajustarlo según tus necesidades
+                                        .clip(RoundedCornerShape(5.dp)),
+                                    contentScale = ContentScale.Crop
+                                )
+                                Spacer(modifier = Modifier.height(8.dp)) // Espaciado entre la imagen y el texto
+                                Text(
+                                    text = item.name,
+                                    style = TextStyle(
+                                        color = Color.Black,
+                                        fontSize = 20.sp,
+                                        textAlign = TextAlign.Center
+                                    ),
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .wrapContentHeight() // Permitir que el texto tenga su propio tamaño de altura
+                                        .padding(8.dp)
+                                )
+                            }
+                        }
+                    }
+                }
+            )
+        }
+    }
+
+}
+
 // ACTUALIZAR
 fun updateCategoriaItem(codeCategoria: String, updatedName: String, updatedUrl: String) {
     // Utiliza el path adecuado en tu base de datos

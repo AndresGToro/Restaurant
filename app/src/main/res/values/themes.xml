@@ -4,8 +4,8 @@
     <style name="Theme.Restaurant" parent="android:Theme.Material.Light.NoActionBar">
         <!-- Cambia el color de la barra de estado aquí -->
         <item name="android:statusBarColor">@color/black</item>
-        //--Borde superior, inferior app-->
-        <item name="android:backgroundTint">@color/black</item>
+        //--Borde superior, inferior app, cambie de color y en el fragment cambio el color-->
+        <item name="android:backgroundTint">@color/white</item>
     </style>
 
 
