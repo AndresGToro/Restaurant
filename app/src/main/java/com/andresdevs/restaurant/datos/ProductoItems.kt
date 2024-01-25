@@ -1,14 +1,17 @@
 package com.andresdevs.restaurant.datos
 
 import android.app.AlertDialog
+import android.content.ContentValues.TAG
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -47,9 +50,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.andresdevs.restaurant.metodos.removeAccents
 import com.andresdevs.restaurant.metodos.tituloNegro
 import com.andresdevs.restaurant.modulo.ProductoUpdate
+import com.andresdevs.restaurant.modulo.ProductosVisualizar
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.google.firebase.Firebase
@@ -106,6 +111,10 @@ suspend fun getProductoItems2(): List<ProductoItems> {
                                 estadoProducto,
                             )
                         )
+                        Log.e(
+                            TAG,
+                            "Funciona $codeCategoriaProducto $nameProducto $precioProducto $urlProducto"
+                        )
                     }
                 }
                 // Devolvemos la lista directamente
@@ -122,6 +131,7 @@ suspend fun getProductoItems2(): List<ProductoItems> {
 //DATOS ASINCRONICOS CARGAR EN LISTA
 @Composable
 fun getProductoItems(): List<ProductoItems> {
+    Log.e(TAG, "Prueba")
     var items by remember { mutableStateOf(emptyList<ProductoItems>()) }
 
     LaunchedEffect(Unit) {
@@ -130,7 +140,6 @@ fun getProductoItems(): List<ProductoItems> {
     }
     return items
 }
-
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -262,6 +271,87 @@ fun productoItemList(itemList: List<ProductoItems>, codigoCategoria: String) {
     }
 }
 
+
+//Filtrar solo promos
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+fun productoPromoItemList(itemList: List<ProductoItems>, codigoCategoria: String) {
+    val deletedItem = remember { mutableStateListOf<ProductoItems>() }
+
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(75.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            tituloNegro("Promos")
+        }
+        Column {
+            LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                itemsIndexed(
+                    items = itemList,
+                    itemContent = { _, item ->
+                        AnimatedVisibility(
+                            visible = !deletedItem.contains(item),
+                            enter = expandVertically(),
+                            exit = shrinkVertically(animationSpec = tween(durationMillis = 1000))
+                        ) {
+                            if (item.codeCategoriaProducto == codigoCategoria) {
+                                Card(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(100.dp)
+                                        .padding(10.dp, 5.dp, 10.dp, 5.dp)
+                                        .background(Color.White),
+                                    shape = RoundedCornerShape(5.dp)
+                                ) {
+                                    // Contenido de la Card
+                                    Column(modifier = Modifier.padding(10.dp)) {
+                                        Row(modifier = Modifier.fillMaxWidth()) {
+                                            GlideImage(
+                                                model = item.urlProducto,
+                                                contentDescription = "ImageItem2",
+                                                contentScale = ContentScale.Crop,
+                                                modifier = Modifier
+                                                    .size(60.dp)
+                                                    .clip(CircleShape)
+                                            )
+
+                                            Row(
+                                                modifier = Modifier.fillMaxWidth(),
+                                                horizontalArrangement = Arrangement.SpaceBetween,
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Text(
+                                                    text = item.nameProducto,
+                                                    style = TextStyle(
+                                                        color = Color.Black,
+                                                        fontSize = 20.sp,
+                                                        textAlign = TextAlign.Center
+                                                    ),
+                                                    modifier = Modifier
+                                                        .padding(20.dp)
+                                                        .weight(1f)
+                                                )
+
+                                                Spacer(modifier = Modifier.width(16.dp))
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                )
+            }
+        }
+    }
+}
+
 fun confirmar(context: Context, onConfirm: () -> Unit) {
     AlertDialog.Builder(context)
         .setTitle("Eliminar")
@@ -308,4 +398,94 @@ fun deleteProductoItem(item: ProductoItems) {
     databaseReference.child(item.codeProducto).removeValue()
         .addOnSuccessListener { }
         .addOnFailureListener { }
+}
+
+
+// productos Visualizar mesero
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+fun productoItemListMesero(itemList: List<ProductoItems>, codigoCategoria: String) {
+    val deletedItem = remember { mutableStateListOf<ProductoItems>() }
+    val context = LocalContext.current
+
+    Column(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(75.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
+        ) {
+            tituloNegro("Producto")
+        }
+        Column {
+            LazyColumn(modifier = Modifier.fillMaxWidth()) {
+                itemsIndexed(
+                    items = itemList,
+                    itemContent = { _, item ->
+                        AnimatedVisibility(
+                            visible = !deletedItem.contains(item),
+                            enter = expandVertically(),
+                            exit = shrinkVertically(animationSpec = tween(durationMillis = 1000))
+                        ) {
+                            if (item.codeCategoriaProducto == codigoCategoria) {
+                                // La función Card y clickable están dentro de un contexto composable
+                                Card(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(100.dp)
+                                        .padding(10.dp, 5.dp, 10.dp, 5.dp)
+                                        .background(Color.White)
+                                        .clickable {
+                                            //add click
+
+                                            Toast.makeText(
+                                                context,
+                                                "Producto agregado !!!",
+                                                Toast.LENGTH_LONG
+                                            ).show()
+                                        },
+
+                                    shape = RoundedCornerShape(5.dp)
+                                ) {
+                                    // Contenido de la Card
+                                    Column(modifier = Modifier.padding(10.dp)) {
+                                        Row(modifier = Modifier.fillMaxWidth()) {
+                                            GlideImage(
+                                                model = item.urlProducto,
+                                                contentDescription = "ImageItem2",
+                                                contentScale = ContentScale.Crop,
+                                                modifier = Modifier
+                                                    .size(60.dp)
+                                                    .clip(CircleShape)
+                                            )
+                                            Row(
+                                                modifier = Modifier.fillMaxWidth(),
+                                                horizontalArrangement = Arrangement.SpaceBetween,
+                                                verticalAlignment = Alignment.CenterVertically
+                                            ) {
+                                                Text(
+                                                    text = item.nameProducto,
+                                                    style = TextStyle(
+                                                        color = Color.Black,
+                                                        fontSize = 20.sp,
+                                                        textAlign = TextAlign.Center
+                                                    ),
+                                                    modifier = Modifier
+                                                        .padding(20.dp)
+                                                        .weight(1f)
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                )
+            }
+        }
+    }
 }

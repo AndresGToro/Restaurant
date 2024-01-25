@@ -7,6 +7,8 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.andresdevs.restaurant.datos.detalleProductosItemList
 
 @Composable
 fun CarritoScreen() {
@@ -16,5 +18,6 @@ fun CarritoScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(text = "Carrito compras")
+
     }
 }

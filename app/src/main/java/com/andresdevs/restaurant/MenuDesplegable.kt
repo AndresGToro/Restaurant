@@ -674,6 +674,6 @@ fun drawerHeader() {
 }
 
 @Composable
-private fun drawerDivider() {
+fun drawerDivider() {
     Divider(thickness = 1.dp, color = Color.DarkGray)
 }

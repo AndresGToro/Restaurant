@@ -7,9 +7,7 @@ import androidx.compose.animation.expandHorizontally
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkHorizontally
 import androidx.compose.animation.shrinkVertically
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -49,16 +47,15 @@ import androidx.compose.ui.graphics.Color.Companion.Black
 import androidx.compose.ui.graphics.Color.Companion.Transparent
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.andresdevs.restaurant.modulo.CategoriaUpdate
-import com.andresdevs.restaurant.R
 import com.andresdevs.restaurant.metodos.removeAccents
 import com.andresdevs.restaurant.metodos.tituloNegro
 import com.andresdevs.restaurant.modulo.Producto
+import com.andresdevs.restaurant.modulo.ProductosVisualizar
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 import com.google.firebase.Firebase
@@ -120,7 +117,7 @@ fun getCategoriaItems(): List<CategoriaItems> {
         items = itemList
     }
     return items
-}
+}   
 
 //LEER (VISUALIZAR LISTA)
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -258,10 +255,13 @@ fun deleteCategoriaItem(item: CategoriaItems) {
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun categoriaItemListHorizontal(itemList: List<CategoriaItems>) {
+    val context = LocalContext.current
     val deletedItem = remember { mutableStateListOf<CategoriaItems>() }
 
     Row(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier.fillMaxWidth()
+            .height(200.dp), // Ajusta la altura según sea necesario
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         LazyRow(
             modifier = Modifier.fillMaxWidth()
@@ -280,7 +280,13 @@ fun categoriaItemListHorizontal(itemList: List<CategoriaItems>) {
                                 .width(200.dp) // Ancho de cada elemento, puedes ajustarlo según tus necesidades
                                 .height(200.dp)
                                 .padding(10.dp, 5.dp, 10.dp, 5.dp)
-                                .background(Transparent),
+                                .background(Transparent)
+                            .clickable {
+                            // Acciones al hacer clic en la tarjeta
+                            val intent = Intent(context, ProductosVisualizar::class.java)
+                            intent.putExtra("codigoUnicoFilaCategoria", item.codeCategoria)
+                            context.startActivity(intent)
+                        },
                             shape = RoundedCornerShape(5.dp)
                         ) {
                             Column(modifier = Modifier.padding(10.dp)) {
@@ -297,7 +303,7 @@ fun categoriaItemListHorizontal(itemList: List<CategoriaItems>) {
                                 Text(
                                     text = item.name,
                                     style = TextStyle(
-                                        color = Color.Black,
+                                        color = Black,
                                         fontSize = 20.sp,
                                         textAlign = TextAlign.Center
                                     ),
@@ -313,5 +319,4 @@ fun categoriaItemListHorizontal(itemList: List<CategoriaItems>) {
             )
         }
     }
-
 }

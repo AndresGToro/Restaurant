@@ -64,7 +64,7 @@ class MainActivity : ComponentActivity() {
                         cajaTextoFondo("Usuario")
                         contrasenaFondo("Contraseña")
                         botonCRUD("Iniciar Sesión") {
-                            startActivity(Intent(this@MainActivity, MenuPrincipal::class.java))
+                            startActivity(Intent(this@MainActivity, PantallaPrincipal::class.java))
                         }
                         Spacer(modifier = Modifier.height(90.dp))
                     }

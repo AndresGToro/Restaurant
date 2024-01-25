@@ -83,10 +83,13 @@
             android:theme="@style/Theme.Restaurant" />
 
         <activity
-            android:name=".navegacioninferior.PantallaPrincipal"
+            android:name=".modulo.ProductosVisualizar"
             android:label="@string/app_name"
             android:theme="@style/Theme.Restaurant" />
 
+        <activity
+            android:name=".navegacioninferior.PantallaPrincipal"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Restaurant" />
     </application>
-
 </manifest>

@@ -45,10 +45,6 @@ class ProductoCreate: ComponentActivity() {
                         val nombreProducto =cajaTexto("Nombre producto")
                         val precio = cajaNumerosDecimales("Precio", "")
                         val url = urlImagen("Url imagen", "")
-                        var estado = estado()
-                        if(estado!="Activo"||estado!="Inactivo"){
-                         estado = "Activo"
-                        }
                         botonCRUD("Crear") {
                             val contactsRef = firebaseDatabase.reference.child(titulo)
                             val newDataKey = contactsRef.push().key
@@ -56,7 +52,7 @@ class ProductoCreate: ComponentActivity() {
                             //
                             val codigoUnico = intent.getStringExtra("codigoUnicoFilaCategoria") ?: ""
 
-                            val contact = ProductoItems(codigoUnico,newDataKey, nombreProducto, precio, url, estado)
+                            val contact = ProductoItems(codigoUnico,newDataKey, nombreProducto, precio, url, "Activo")
                             contactRef.setValue(contact)
 
                             Toast.makeText(
