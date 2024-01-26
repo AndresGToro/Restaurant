@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -62,6 +63,9 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import kotlin.coroutines.resume
 import kotlin.coroutines.suspendCoroutine
 
@@ -401,6 +405,8 @@ fun deleteProductoItem(item: ProductoItems) {
 }
 
 
+val listaDetallesProductos = mutableListOf<DetalleProductosItems>()
+
 // productos Visualizar mesero
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -439,15 +445,16 @@ fun productoItemListMesero(itemList: List<ProductoItems>, codigoCategoria: Strin
                                         .padding(10.dp, 5.dp, 10.dp, 5.dp)
                                         .background(Color.White)
                                         .clickable {
-                                            //add click
-
-                                            Toast.makeText(
-                                                context,
-                                                "Producto agregado !!!",
-                                                Toast.LENGTH_LONG
-                                            ).show()
+                                            val detalleProducto = DetalleProductosItems(
+                                                codeProducto = item.codeProducto,
+                                                nameProducto = item.nameProducto,
+                                                precioProducto = item.precioProducto,
+                                                cantidadProducto = "1",
+                                                subtotalProducto = "666",
+                                                urlProducto = item.urlProducto
+                                            )
+                                            listaDetallesProductos.add(detalleProducto) // Agrega el detalle a la lista
                                         },
-
                                     shape = RoundedCornerShape(5.dp)
                                 ) {
                                     // Contenido de la Card
@@ -489,3 +496,5 @@ fun productoItemListMesero(itemList: List<ProductoItems>, codigoCategoria: Strin
         }
     }
 }
+
+

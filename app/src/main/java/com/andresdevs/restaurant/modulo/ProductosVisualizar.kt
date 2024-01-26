@@ -5,17 +5,21 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.andresdevs.restaurant.datos.DetalleProductosItems
 import com.andresdevs.restaurant.datos.getProductoItems
 import com.andresdevs.restaurant.datos.productoItemListMesero
 import com.andresdevs.restaurant.ui.theme.RestaurantTheme
 
 class ProductosVisualizar : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -29,7 +33,7 @@ class ProductosVisualizar : ComponentActivity() {
                 ) {
                     val codigoUnico = intent.getStringExtra("codigoUnicoFilaCategoria") ?: ""
                     Log.e(TAG, "Codigo unico: $codigoUnico")
-                    //carga lista
+
                     productoItemListMesero(itemList = getProductoItems(), codigoUnico)
                 }
             }

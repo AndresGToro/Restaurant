@@ -69,7 +69,7 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
     // Navigation Compose
-    implementation ("androidx.navigation:navigation-compose:2.7.6")
+    implementation("androidx.navigation:navigation-compose:2.7.6")
     ////RECYCLER VIEW ( SON LAS 2)
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     // For control over item selection of both touch and mouse driven selection
@@ -77,7 +77,13 @@ dependencies {
     //Glide
     implementation("com.github.bumptech.glide:compose:1.0.0-beta01")
     // carrito compras (ver datos lista sin guardar)
-    implementation ("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.7.0")
 
+  // Reemplaza "x.x.x" con la versión de Jetpack Compose
+    implementation("androidx.compose.foundation:foundation")
+    implementation("androidx.compose.material:material")
+    implementation("androidx.compose.runtime:runtime-livedata")
 
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core") // Reemplaza "x.x.x" con la versión de Kotlin Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android")
 }
