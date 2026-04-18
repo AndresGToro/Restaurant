@@ -9,6 +9,8 @@ import com.andresdevs.restaurant.domain.usecase.categoria.GetCategoriaUseCase
 import com.andresdevs.restaurant.domain.usecase.categoria.UpdateCategoriaUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class CategoriaViewModel(
@@ -18,49 +20,94 @@ class CategoriaViewModel(
     private val deleteCategoriaUseCase: DeleteCategoriaUseCase
 ) : ViewModel() {
 
-    // 🔄 Estado UI
-    var _state = MutableStateFlow(CategoriaState())
-    val state: StateFlow<CategoriaState> = _state
+    private val _state = MutableStateFlow(CategoriaState())
+    val state: StateFlow<CategoriaState> = _state.asStateFlow()
 
     init {
         cargarCategorias()
     }
 
-    private fun cargarCategorias() {
+    fun cargarCategorias() {
         viewModelScope.launch {
-            _state.value = _state.value.copy(isLoading = true)
-            val categorias = getCategoriasUseCase()
-            _state.value = _state.value.copy(
-                categorias = categorias,
-                isLoading = false
-            )
+            _state.update { it.copy(isLoading = true) }
+            try {
+                val categorias = getCategoriasUseCase()
+                _state.update { it.copy(categorias = categorias, isLoading = false) }
+            } catch (e: Exception) {
+                _state.update { it.copy(isLoading = false, error = e.message) }
+            }
         }
     }
 
     fun onNombreChange(nuevoNombre: String) {
-        _state.value = _state.value.copy(nombre = nuevoNombre)
+        _state.update { it.copy(nombre = nuevoNombre) }
     }
 
     fun onUrlChange(nuevaUrl: String) {
-        _state.value = _state.value.copy(url = nuevaUrl)
+        _state.update { it.copy(url = nuevaUrl) }
     }
 
-    fun onGuardarClick() {
+    fun guardarCategoria() {
+        val currentNombre = _state.value.nombre
+        val currentUrl = _state.value.url
+        
+        if (currentNombre.isBlank() || currentUrl.isBlank()) {
+            _state.update { it.copy(error = "El nombre y la URL son obligatorios") }
+            return
+        }
+
         viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
             val nueva = Categoria(
-                codeCategoria = generateId(), // usar UUID.randomUUID().toString() o key de Firebase
-                nombre = state.value.nombre,
-                imagenUrl = state.value.url,
+                codeCategoria = "",
+                nombre = currentNombre,
+                imagenUrl = currentUrl,
                 estado = "Activo"
             )
-            createCategoriaUseCase(nueva)
-            cargarCategorias() // recargar lista
-            _state.value = _state.value.copy(nombre = "", url = "")
+            val success = createCategoriaUseCase(nueva)
+            if (success) {
+                _state.update { it.copy(isLoading = false, isSuccess = true, nombre = "", url = "") }
+                cargarCategorias()
+            } else {
+                _state.update { it.copy(isLoading = false, error = "Error al guardar la categoría") }
+            }
         }
     }
 
-    private fun generateId(): String {
-        // Aquí podés usar Firebase push().key si querés generar desde backend
-        return System.currentTimeMillis().toString()
+    fun eliminarCategoria(categoria: Categoria) {
+        viewModelScope.launch {
+            val success = deleteCategoriaUseCase(categoria.codeCategoria)
+            if (success) {
+                cargarCategorias()
+            } else {
+                _state.update { it.copy(error = "Error al eliminar la categoría") }
+            }
+        }
+    }
+
+    fun actualizarCategoria(categoria: Categoria, nuevoNombre: String, nuevaUrl: String) {
+        if (nuevoNombre.isBlank() || nuevaUrl.isBlank()) {
+            _state.update { it.copy(error = "El nombre y la URL son obligatorios") }
+            return
+        }
+
+        viewModelScope.launch {
+            _state.update { it.copy(isLoading = true) }
+            val updated = categoria.copy(
+                nombre = nuevoNombre,
+                imagenUrl = nuevaUrl
+            )
+            val success = updateCategoriaUseCase(updated)
+            if (success) {
+                _state.update { it.copy(isLoading = false, isSuccess = true) }
+                cargarCategorias()
+            } else {
+                _state.update { it.copy(isLoading = false, error = "Error al actualizar la categoria") }
+            }
+        }
+    }
+    
+    fun resetSuccess() {
+        _state.update { it.copy(isSuccess = false) }
     }
 }

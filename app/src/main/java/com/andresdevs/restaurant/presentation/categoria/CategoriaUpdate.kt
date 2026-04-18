@@ -12,13 +12,14 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.andresdevs.restaurant.data.model.updateCategoriaItem
 import com.andresdevs.restaurant.presentation.common.components.botonCRUD
 import com.andresdevs.restaurant.presentation.common.components.cajaTexto2
 import com.andresdevs.restaurant.presentation.common.components.estado
 import com.andresdevs.restaurant.presentation.common.components.tituloNegro
 import com.andresdevs.restaurant.presentation.common.components.urlImagen
 import com.andresdevs.restaurant.ui.theme.RestaurantTheme
+import com.google.firebase.Firebase
+import com.google.firebase.database.database
 
 class CategoriaUpdate : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,11 +44,19 @@ class CategoriaUpdate : ComponentActivity() {
                         var newNombreCategoria = cajaTexto2("Nombre categoría", nombreCategoria)
                         var newUrlImgCategoria = urlImagen("Url imagen", urlImagen)
                         var estadoNew = estado()
-                        if(estadoNew!="Activo"||estadoNew!="Inactivo"){
+                        if(estadoNew!="Activo"&&estadoNew!="Inactivo"){
                             estadoNew = "Activo"
                         }
                         botonCRUD("Actualizar") {
-                            updateCategoriaItem(codigoUnico,newNombreCategoria, newUrlImgCategoria, estadoNew)
+                            val categoriaMap = mapOf(
+                                "codeCategoria" to codigoUnico,
+                                "name" to newNombreCategoria,
+                                "url" to newUrlImgCategoria,
+                                "estado" to estadoNew
+                            )
+                            Firebase.database.getReference("Categoria")
+                                .child(codigoUnico)
+                                .setValue(categoriaMap)
                             Toast.makeText(
                                 this@CategoriaUpdate,
                                 "Categoría actualizada !!!",

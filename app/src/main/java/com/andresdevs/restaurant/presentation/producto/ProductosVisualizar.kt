@@ -1,8 +1,6 @@
 package com.andresdevs.restaurant.presentation.producto
 
-import android.content.ContentValues.TAG
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,8 +8,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.andresdevs.restaurant.data.model.getProductoDto
-import com.andresdevs.restaurant.data.model.productoItemListMesero
 import com.andresdevs.restaurant.ui.theme.RestaurantTheme
 
 class ProductosVisualizar : ComponentActivity() {
@@ -28,9 +24,7 @@ class ProductosVisualizar : ComponentActivity() {
                     contentColor = Color.Black
                 ) {
                     val codigoUnico = intent.getStringExtra("codigoUnicoFilaCategoria") ?: ""
-                    Log.e(TAG, "Codigo unico: $codigoUnico")
-
-                    productoItemListMesero(itemList = getProductoDto(), codigoUnico)
+                    ProductoScreen(codigoCategoria = codigoUnico)
                 }
             }
         }

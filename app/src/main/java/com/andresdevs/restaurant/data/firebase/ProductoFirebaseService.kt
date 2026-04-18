@@ -1,59 +1,55 @@
 package com.andresdevs.restaurant.data.firebase
 
+import com.andresdevs.restaurant.core.constants.FirebaseCollections
 import com.andresdevs.restaurant.data.model.ProductoDto
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import kotlinx.coroutines.suspendCancellableCoroutine
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
-import kotlin.coroutines.resume
+import javax.inject.Inject
 
-class ProductoFirebaseService {
-    private val database = FirebaseDatabase.getInstance().getReference("Producto")
+class ProductoFirebaseService @Inject constructor(
+    private val firestore: FirebaseFirestore
+) {
+    private val collection = firestore.collection(FirebaseCollections.PRODUCTS)
 
-    suspend fun getAllProductos(): List<ProductoDto> = suspendCancellableCoroutine{ cont ->
-        database.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val lista = mutableListOf<ProductoDto>()
-                for (item in snapshot.children) {
-                    val producto = item.getValue(ProductoDto::class.java)
-                    producto?.let { lista.add(it) }
-                }
-                cont.resume(lista)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                cont.resume(emptyList())
-            }
-        })
+    suspend fun getAllProductos(): List<ProductoDto> {
+        val snapshot = collection.get().await()
+        return snapshot.documents.mapNotNull { doc ->
+            doc.toObject(ProductoDto::class.java)?.copy(
+                codeProducto = doc.id
+            )
+        }
     }
 
     suspend fun createProducto(producto: ProductoDto): Boolean {
         return try {
-            val newRef = database.push()
-            val productoWithId = producto.copy(codeProducto = newRef.key ?: producto.codeProducto)
-            newRef.setValue(productoWithId).await()
+            val docId = if (producto.codeProducto.isBlank()) {
+                collection.document().id
+            } else {
+                producto.codeProducto
+            }
+            collection.document(docId).set(producto.copy(codeProducto = docId)).await()
             true
-            } catch (e: Exception) {
+        } catch (_: Exception) {
             false
         }
     }
 
     suspend fun updateProducto(producto: ProductoDto): Boolean {
+        if (producto.codeProducto.isBlank()) return false
         return try {
-            database.child(producto.codeProducto).setValue(producto).await()
+            collection.document(producto.codeProducto).set(producto).await()
             true
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             false
         }
     }
 
     suspend fun deleteProducto(productoId: String): Boolean {
+        if (productoId.isBlank()) return false
         return try {
-            database.child(productoId).removeValue().await()
+            collection.document(productoId).delete().await()
             true
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             false
         }
     }

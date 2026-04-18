@@ -5,7 +5,8 @@ import com.andresdevs.restaurant.domain.model.Categoria
 data class CategoriaState(
     val isLoading: Boolean = false,
     val categorias: List<Categoria> = emptyList(),
+    val error: String? = null,
     val nombre: String = "",
     val url: String = "",
-    val error: String? = null
+    val isSuccess: Boolean = false
 )

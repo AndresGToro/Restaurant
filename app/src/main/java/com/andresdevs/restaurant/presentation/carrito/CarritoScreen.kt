@@ -1,4 +1,4 @@
-package com.andresdevs.restaurant.presentation.navigation.bottomnav
+package com.andresdevs.restaurant.presentation.carrito
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -7,8 +7,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.andresdevs.restaurant.data.model.detalleProductosItemList
-import com.andresdevs.restaurant.data.model.listaDetallesProductos
 
 @Composable
 fun CarritoScreen() {
@@ -19,7 +17,6 @@ fun CarritoScreen() {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(text = "Carrito de compras")
-       // detalleProductosItemList(itemList= obtenerListaProductos())
-        detalleProductosItemList(itemList = listaDetallesProductos)
+        Text(text = "Aun no hay productos agregados.")
     }
 }

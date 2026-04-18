@@ -53,16 +53,15 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.andresdevs.restaurant.R
-import com.andresdevs.restaurant.data.model.categoriaItemList
-import com.andresdevs.restaurant.data.model.getCategoriaDto
-import com.andresdevs.restaurant.data.model.getProductoDto
-import com.andresdevs.restaurant.data.model.productoDtoList
+import com.andresdevs.restaurant.presentation.categoria.CategoriaScreen
 import com.andresdevs.restaurant.presentation.categoria.CategoriaCreate
 import com.andresdevs.restaurant.presentation.common.components.botonCRUD
 import com.andresdevs.restaurant.presentation.common.components.botonFlotanteAgregar
 import com.andresdevs.restaurant.presentation.common.components.cajaNumerosEnteros
 import com.andresdevs.restaurant.presentation.common.components.tituloNegro
 import com.andresdevs.restaurant.presentation.producto.ProductoCreate
+import com.andresdevs.restaurant.presentation.producto.Producto
+import com.andresdevs.restaurant.presentation.producto.ProductoScreen
 import com.andresdevs.restaurant.presentation.usuario.UsuarioCreate
 import kotlinx.coroutines.launch
 
@@ -505,11 +504,11 @@ fun NavDrawerCategoria() {
                 contentAlignment = Alignment.BottomEnd
             ) {
 
-                categoriaItemList(itemList = getCategoriaDto())
-                //BTOTON AGREGAR PANTALLA
-                botonFlotanteAgregar(
-                    onClick = {
-                        context.startActivity(Intent(context, CategoriaCreate::class.java))
+                CategoriaScreen(
+                    onCategoriaClick = { categoriaId ->
+                        val intent = Intent(context, Producto::class.java)
+                        intent.putExtra("codigoUnicoFilaCategoria", categoriaId)
+                        context.startActivity(intent)
                     }
                 )
             }
@@ -621,16 +620,7 @@ fun NavDrawerProducto(codigoCategoria: String) {
 
                 //carga lista
                 //codigoCategoria
-                productoDtoList(itemList = getProductoDto(), codigoCategoria)
-                //TODOS BOTONES VISUALIZAN PANTALLA
-
-                botonFlotanteAgregar(
-                    onClick = {
-                        val intent = Intent(context, ProductoCreate::class.java)
-                        intent.putExtra("codigoUnicoFilaCategoria", codigoCategoria)
-                        context.startActivity(intent)
-                    }
-                )
+                ProductoScreen(codigoCategoria = codigoCategoria)
             }
         }
     }

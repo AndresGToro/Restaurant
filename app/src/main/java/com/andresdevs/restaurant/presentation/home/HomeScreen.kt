@@ -6,15 +6,14 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import com.andresdevs.restaurant.data.model.categoriaItemListHorizontal
-import com.andresdevs.restaurant.data.model.getCategoriaDto
-import com.andresdevs.restaurant.data.model.getProductoDto
-import com.andresdevs.restaurant.data.model.productoPromoItemList
+import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
 
@@ -27,15 +26,15 @@ fun HomeScreen() {
         verticalArrangement = Arrangement.Center
     ) {
         cargar()
-        LazyColumn(
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            item {
-                categoriaItemListHorizontal(itemList = getCategoriaDto())
-            }
-        }
-        // codigo categoria
-        productoPromoItemList(itemList = getProductoDto(), "-Nor6DISCM91G6Kg7yTf")
+        Text(
+            text = "Bienvenido a Alitas BBQ",
+            style = MaterialTheme.typography.headlineSmall,
+            modifier = Modifier.padding(16.dp)
+        )
+        Text(
+            text = "Usa la pestaña de Categorias para gestionar el menu.",
+            style = MaterialTheme.typography.bodyMedium
+        )
     }
 }
 

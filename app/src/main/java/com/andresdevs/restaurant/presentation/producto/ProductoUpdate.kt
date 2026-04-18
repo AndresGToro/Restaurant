@@ -12,7 +12,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import com.andresdevs.restaurant.data.model.updateProductoDto
 import com.andresdevs.restaurant.presentation.common.components.botonCRUD
 import com.andresdevs.restaurant.presentation.common.components.cajaNumerosDecimales
 import com.andresdevs.restaurant.presentation.common.components.cajaTexto2
@@ -20,6 +19,8 @@ import com.andresdevs.restaurant.presentation.common.components.estado
 import com.andresdevs.restaurant.presentation.common.components.tituloNegro
 import com.andresdevs.restaurant.presentation.common.components.urlImagen
 import com.andresdevs.restaurant.ui.theme.RestaurantTheme
+import com.google.firebase.Firebase
+import com.google.firebase.database.database
 
 class ProductoUpdate: ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,11 +48,21 @@ class ProductoUpdate: ComponentActivity() {
                         var newPrecioProducto = cajaNumerosDecimales("Precio", precioProducto)
                         var urlNew = urlImagen("Url imagen", urlProducto)
                         var estadoNew = estado()
-                        if(estadoNew!="Activo"||estadoNew!="Inactivo"){
+                        if(estadoNew!="Activo"&&estadoNew!="Inactivo"){
                             estadoNew = "Activo"
                         }
                         botonCRUD("Actualizar") {
-                            updateProductoDto(codeCategoriaProducto, codeProducto, newNombreProducto, newPrecioProducto, urlNew, estadoNew)
+                            val productoMap = mapOf(
+                                "codeCategoriaProducto" to codeCategoriaProducto,
+                                "codeProducto" to codeProducto,
+                                "nameProducto" to newNombreProducto,
+                                "precioProducto" to newPrecioProducto,
+                                "urlProducto" to urlNew,
+                                "estadoProducto" to estadoNew
+                            )
+                            Firebase.database.getReference("Producto")
+                                .child(codeProducto)
+                                .setValue(productoMap)
                             Toast.makeText(
                                 this@ProductoUpdate,
                                 "Producto actualizado !!!",

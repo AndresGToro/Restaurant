@@ -1,57 +1,51 @@
 package com.andresdevs.restaurant.data.firebase
 
+import com.andresdevs.restaurant.core.constants.FirebaseCollections
 import com.andresdevs.restaurant.data.model.UsuarioDto
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import kotlinx.coroutines.suspendCancellableCoroutine
+import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
-import kotlin.coroutines.resume
+import javax.inject.Inject
 
-class UsuarioFirebaseService {
-    private val database = FirebaseDatabase.getInstance().getReference("Usuario")
+class UsuarioFirebaseService @Inject constructor(
+    private val firestore: FirebaseFirestore
+) {
+    private val collection = firestore.collection(FirebaseCollections.USERS)
 
-    suspend fun getAllUsuarios(): List<UsuarioDto> = suspendCancellableCoroutine { cont ->
-        database.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                val lista = mutableListOf<UsuarioDto>()
-                for (item in snapshot.children) {
-                    val usuario = item.getValue(UsuarioDto::class.java)
-                    usuario?.let { lista.add(it) }
-                }
-                cont.resume(lista)
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                cont.resume(emptyList())
-            }
-        })
+    suspend fun getAllUsuarios(): List<UsuarioDto> {
+        val snapshot = collection.get().await()
+        return snapshot.documents.mapNotNull { doc ->
+            doc.toObject(UsuarioDto::class.java)?.copy(
+                cedula = if (doc.id.isNotBlank()) doc.id else ""
+            )
+        }
     }
 
+    suspend fun createUsuario(usuario: UsuarioDto): Boolean {
+        if (usuario.cedula.isBlank()) return false
+        return try {
+            collection.document(usuario.cedula).set(usuario).await()
+            true
+        } catch (_: Exception) {
+            false
+        }
+    }
 
-    // suspend fun createUsuario(usuario: UsuarioDto): Boolean {
-    //     return try {
-    //         val newRef = database.push()
-    //         val usuarioWithId = usuario.copy(codeUsuario = newRef.key ?: usuario.codeUsuario)
-    //         newRef.setValue(usuarioWithId).await()
-    //         true
-    // }
-
-
-    // suspend fun updateUsuario(usuario: UsuarioDto): Boolean {
-    //     return try {
-    //         database.child(usuario.codeUsuario).setValue(usuario).await()
-    //     }catch (e: Exception){
-    //         false
-    //     }
-    // }
+    suspend fun updateUsuario(usuario: UsuarioDto): Boolean {
+        if (usuario.cedula.isBlank()) return false
+        return try {
+            collection.document(usuario.cedula).set(usuario).await()
+            true
+        } catch (_: Exception) {
+            false
+        }
+    }
 
     suspend fun deleteUsuario(usuarioId: String): Boolean {
+        if (usuarioId.isBlank()) return false
         return try {
-            database.child(usuarioId).removeValue().await()
+            collection.document(usuarioId).delete().await()
             true
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             false
         }
     }
